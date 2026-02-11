@@ -1,0 +1,161 @@
+:root {
+    --bg-color: #FFD1DC; /* Pastel Pink */
+    --card-bg: #FFF;
+    --text-color: #5D4350;
+    --primary-btn: #FF7E9C; /* Rose */
+    --primary-btn-hover: #FF5C83;
+    --secondary-btn: #E0E0E0;
+    --secondary-text: #757575;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Quicksand', sans-serif;
+    background-color: var(--bg-color);
+    background-image: radial-gradient(circle, #ffe6eb 10%, transparent 10%), radial-gradient(circle, #ffe6eb 10%, transparent 10%);
+    background-size: 50px 50px;
+    background-position: 0 0, 25px 25px;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+    padding: 20px;
+}
+
+.container {
+    text-align: center;
+    z-index: 10;
+    position: relative;
+}
+
+#proposal-card {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(255, 126, 156, 0.2);
+    backdrop-filter: blur(5px);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    max-width: 90vw;
+}
+
+.header-text {
+    font-size: 2.5rem;
+    color: var(--text-color);
+    margin-bottom: 30px;
+    font-weight: 700;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+    position: relative; /* Context for absolute positioning if needed inside, mainly for layout here */
+    min-height: 60px; /* Reserve space */
+}
+
+.btn {
+    border: none;
+    padding: 15px 32px;
+    font-size: 1.2rem;
+    border-radius: 50px;
+    cursor: pointer;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    outline: none;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.yes-btn {
+    background-color: var(--primary-btn);
+    color: white;
+    font-size: 1.4rem; /* Slightly larger */
+    animation: pulse 2s infinite;
+}
+
+.yes-btn:hover {
+    background-color: var(--primary-btn-hover);
+    transform: scale(1.05);
+}
+
+.no-btn {
+    background-color: var(--secondary-btn);
+    color: var(--secondary-text);
+    position: relative; /* To allow movement */
+}
+
+/* Success Message State */
+.hidden {
+    display: none;
+}
+
+#success-message {
+    animation: fadeIn 1s ease;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(255, 126, 156, 0.3);
+}
+
+.success-gif {
+    max-width: 100%;
+    border-radius: 10px;
+    margin: 20px 0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.sub-text {
+    font-size: 1.2rem;
+    color: var(--text-color);
+    margin-top: 10px;
+}
+
+/* Floating Hearts Background */
+.heart {
+    position: absolute;
+    color: rgba(255, 126, 156, 0.4);
+    font-size: 20px;
+    animation: floatUp 15s linear infinite;
+    bottom: -100px;
+    user-select: none;
+    z-index: 1;
+}
+
+/* Animations */
+@keyframes pulse {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 126, 156, 0.7); }
+    70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(255, 126, 156, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 126, 156, 0); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes floatUp {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
+}
+
+/* Mobile adjustments */
+@media (max-width: 480px) {
+    .header-text {
+        font-size: 1.8rem;
+    }
+    .btn {
+        padding: 12px 24px;
+        font-size: 1rem;
+    }
+    .yes-btn {
+        font-size: 1.2rem;
+    }
+}
