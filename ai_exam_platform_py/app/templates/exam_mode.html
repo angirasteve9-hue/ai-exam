@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10" x-data="examTimer()">
+
+    <!-- Header with Timer -->
+    <div class="flex items-center justify-between mb-8 sticky top-16 bg-gray-50 z-40 py-4 border-b border-gray-200">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900">{{ exam.title }}</h1>
+            <p class="text-sm text-gray-500">{{ exam.subject }}</p>
+        </div>
+        <div class="flex items-center space-x-4">
+            <div class="text-2xl font-mono font-bold text-indigo-600" :class="{'text-red-600': timeRemaining < 300}">
+                <span x-text="formatTime(timeRemaining)"></span>
+            </div>
+            <button type="button"
+                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none">
+                End Exam
+            </button>
+        </div>
+    </div>
+
+    <form action="/exam/{{ exam.id }}/submit" method="POST" class="space-y-8">
+        {% for question in exam.questions %}
+        <div class="bg-white shadow overflow-hidden sm:rounded-lg question-card">
+            <div class="px-4 py-5 sm:px-6 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">
+                    Question {{ question.question_number }}
+                </h3>
+                <span
+                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                    {{ question.marks }} Marks
+                </span>
+            </div>
+            <div class="px-4 py-5 sm:p-6 space-y-4">
+                <p class="text-gray-800 text-lg">{{ question.text }}</p>
+
+                {% if question.question_type == 'long_answer' %}
+                <div>
+                    <textarea name="answers[{{ question.id }}]" rows="6"
+                        class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                        placeholder="Type your answer here..."></textarea>
+                </div>
+                {% elif question.question_type == 'multiple_choice' %}
+                <!-- Placeholder for MCQ logic if implemented -->
+                <div class="space-y-2">
+                    <label class="inline-flex items-center">
+                        <input type="radio" class="form-radio" name="answers[{{ question.id }}]" value="A">
+                        <span class="ml-2">Option A</span>
+                    </label>
+                    <!-- Add more options -->
+                </div>
+                {% else %}
+                <div>
+                    <input type="text" name="answers[{{ question.id }}]"
+                        class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                        placeholder="Your answer">
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+
+        <div class="flex justify-end pt-5">
+            <button type="submit"
+                class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                Submit Answers
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+    function examTimer() {
+        return {
+            timeRemaining: 3600, // 1 hour in seconds, ideally customizable
+            init() {
+                setInterval(() => {
+                    if (this.timeRemaining > 0) {
+                        this.timeRemaining--;
+                    }
+                }, 1000);
+            },
+            formatTime(seconds) {
+                const minutes = Math.floor(seconds / 60);
+                const remainingSeconds = seconds % 60;
+                return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+            }
+        }
+    }
+</script>
+{% endblock %}

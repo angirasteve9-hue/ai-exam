@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <!-- Score Card -->
+    <div class="bg-white shadow overflow-hidden sm:rounded-lg mb-8 text-center p-8">
+        <h2 class="text-3xl font-extrabold text-gray-900">Exam Results</h2>
+        <div class="mt-4 flex justify-center items-center">
+            <div class="text-6xl font-black text-indigo-600">
+                {{ attempt.total_score }} <span class="text-2xl text-gray-400">/ {{ attempt.score_out_of }}</span>
+            </div>
+        </div>
+        <p class="mt-2 text-sm text-gray-500">Completed on {{ attempt.completed_at.strftime('%Y-%m-%d %H:%M') }}</p>
+
+        <div class="mt-6">
+            <a href="/dashboard" class="text-indigo-600 hover:text-indigo-900 font-medium">Back to Dashboard</a>
+        </div>
+    </div>
+
+    <!-- Detailed Breakdown -->
+    <h3 class="text-xl font-bold text-gray-900 mb-4">Detailed Feedback</h3>
+
+    <div class="space-y-6">
+        {% for answer in attempt.answers %}
+        <div class="bg-white shadow sm:rounded-lg overflow-hidden">
+            <div class="px-4 py-5 sm:px-6 bg-gray-50 border-b border-gray-200">
+                <h4 class="text-lg leading-6 font-medium text-gray-900">
+                    Question {{ loop.index }}
+                </h4>
+            </div>
+            <div class="px-4 py-5 sm:p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h5 class="text-sm font-medium text-gray-500 uppercase tracking-wider">Your Answer</h5>
+                    <p class="mt-1 text-gray-900 bg-gray-50 p-3 rounded-md min-h-[4rem]">{{ answer.user_response }}</p>
+                </div>
+                <div>
+                    <h5 class="text-sm font-medium text-gray-500 uppercase tracking-wider flex justify-between">
+                        <span>AI Feedback</span>
+                        <span class="text-indigo-600 font-bold">{{ answer.ai_score }} Marks Awarded</span>
+                    </h5>
+                    <p class="mt-1 text-gray-800 bg-indigo-50 p-3 rounded-md border border-indigo-100 min-h-[4rem]">
+                        {{ answer.ai_feedback }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script>
+    // Trigger confetti if score is > 70%
+    const score = {{ attempt.total_score }};
+    const max = {{ attempt.score_out_of }};
+    if (max > 0 && (score / max) > 0.7) {
+        confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 }
+        });
+    }
+</script>
+{% endblock %}
